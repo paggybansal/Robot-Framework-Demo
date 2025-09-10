@@ -1,10 +1,10 @@
 name: Robot Framework Tests
 
 on:
-  push:        # Run on every push to the repository
+  push:
     branches:
-      - master   # Specify the branch to trigger the workflow
-  pull_request: # Run on pull request events
+      - master
+  pull_request:
     branches:
       - master
 
@@ -13,33 +13,28 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Step 1: Checkout the repository code
     - name: Checkout Repository Code
       uses: actions/checkout@v3
 
-    # Step 2: Set up Python environment
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.13' # Specify the desired Python version
+        python-version: '3.11'
 
-    # Step 3: Install dependencies
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install robotframework         # Install Robot Framework
-        pip install robotframework-seleniumlibrary  # Install SeleniumLibrary if you're using web tests
-        pip install -r requirements.txt    # Optional: Install dependencies from a requirements.txt file if you have one
+        pip install robotframework
+        pip install robotframework-seleniumlibrary
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-    # Step 4: Run Robot Framework tests
     - name: Execute Robot Framework Tests
       run: |
-        mkdir -p results                  # Create a results directory
-        robot --outputdir results tests   # Replace 'tests' with your test folder
+        mkdir -p results
+        robot --outputdir results tests/test_connectivity.robot
 
-    # Step 5: Upload test results as workflow artifacts (optional)
     - name: Upload Robot Framework Results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: robot-results
-        path: results/                    # Upload the test results folder
+        path: results/
