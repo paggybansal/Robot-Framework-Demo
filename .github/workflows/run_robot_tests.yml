@@ -31,7 +31,7 @@ jobs:
     - name: Execute Robot Framework Tests
       run: |
         mkdir -p results
-        robot --outputdir results tests/test_connectivity.robot
+        robot --outputdir results Tests/test_connectivity.robot
 
     - name: Upload Robot Framework Results
       uses: actions/upload-artifact@v4
