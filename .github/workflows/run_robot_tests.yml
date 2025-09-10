@@ -3,10 +3,10 @@ name: Robot Framework Tests
 on:
   push:        # Run on every push to the repository
     branches:
-      - main   # Specify the branch to trigger the workflow
+      - master   # Specify the branch to trigger the workflow
   pull_request: # Run on pull request events
     branches:
-      - main
+      - master
 
 jobs:
   test:
