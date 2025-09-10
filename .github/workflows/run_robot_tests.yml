@@ -1,0 +1,31 @@
+name: Run Robot Framework Tests
+
+on:
+  push:
+    paths:
+      - '**/test_connectivity.robot'
+      - '.github/workflows/run_robot_tests.yml'
+  pull_request:
+    paths:
+      - '**/test_connectivity.robot'
+      - '.github/workflows/run_robot_tests.yml'
+
+jobs:
+  robot-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Robot Framework
+        run: pip install robotframework
+
+      - name: Run test_connectivity.robot
+        run: robot test_connectivity.robot
+        working-directory: C:\Users\parag_bansal\PycharmProjects\RobotFramework
+
