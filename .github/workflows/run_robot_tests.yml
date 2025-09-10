@@ -1,31 +1,45 @@
-name: Run Robot Framework Tests
+name: Robot Framework Tests
 
 on:
-  push:
-    paths:
-      - '**/test_connectivity.robot'
-      - '.github/workflows/run_robot_tests.yml'
-  pull_request:
-    paths:
-      - '**/test_connectivity.robot'
-      - '.github/workflows/run_robot_tests.yml'
+  push:        # Run on every push to the repository
+    branches:
+      - main   # Specify the branch to trigger the workflow
+  pull_request: # Run on pull request events
+    branches:
+      - main
 
 jobs:
-  robot-tests:
+  test:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    # Step 1: Checkout the repository code
+    - name: Checkout Repository Code
+      uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
+    # Step 2: Set up Python environment
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.13' # Specify the desired Python version
 
-      - name: Install Robot Framework
-        run: pip install robotframework
+    # Step 3: Install dependencies
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install robotframework         # Install Robot Framework
+        pip install robotframework-seleniumlibrary  # Install SeleniumLibrary if you're using web tests
+        pip install -r requirements.txt    # Optional: Install dependencies from a requirements.txt file if you have one
 
-      - name: Run test_connectivity.robot
-        run: robot test_connectivity.robot
-        working-directory: C:\Users\parag_bansal\PycharmProjects\RobotFramework
+    # Step 4: Run Robot Framework tests
+    - name: Execute Robot Framework Tests
+      run: |
+        mkdir -p results                  # Create a results directory
+        robot --outputdir results tests   # Replace 'tests' with your test folder
 
+    # Step 5: Upload test results as workflow artifacts (optional)
+    - name: Upload Robot Framework Results
+      uses: actions/upload-artifact@v3
+      with:
+        name: robot-results
+        path: results/                    # Upload the test results folder
