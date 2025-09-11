@@ -26,6 +26,13 @@ jobs:
       run: |
         echo "ORACLE_CLIENT_PATH = '$HOME/oracle_instantclient/instantclient_21_13'" > settings.py
 
+    - name: Add DB Passwords to settings.py and print them
+      run: |
+        echo "ORACLE_DB_PASSWORD = '${{ secrets.ORACLE_DB_PASSWORD }}'" >> settings.py
+        echo "POSTGRES_DB_PASSWORD = '${{ secrets.POSTGRES_DB_PASSWORD }}'" >> settings.py
+        echo "ORACLE_DB_PASSWORD: ${{ secrets.ORACLE_DB_PASSWORD }}"
+        echo "POSTGRES_DB_PASSWORD: ${{ secrets.POSTGRES_DB_PASSWORD }}"
+
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
